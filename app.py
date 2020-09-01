@@ -27,6 +27,7 @@ def receive_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
+                send_message(recipient_id, message["timestamp"])
                 if message['message'].get('text'):
                     send_message(recipient_id, str(message))
                     response = message['message']['text']
@@ -34,6 +35,8 @@ def receive_message():
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     send_message(recipient_id, str(message))
+                    send_message(recipient_id, message['message']["attachments"][0]["type"])
+                    send_message(recipient_id, message['message']["attachments"][0]["payload"]["url"])
                     response_sent_nontext = get_message()
                     send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
