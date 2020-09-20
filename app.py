@@ -70,6 +70,8 @@ def get_response(user_msg):
     if len(resp['intents']) == 0:
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
     elif resp['intents'][0]['name'] == 'food_ate':
+        if 'food:food' not in resp['entities']:
+            return "I'm not really sure what you ate... seems like I need to learn more about the world of humans!"
         food_ate = resp["entities"]['food:food'][0]['value']
         update_firestore("test", food_ate)
         return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
