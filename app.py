@@ -64,6 +64,7 @@ def process_response(recipient_id, user_msg):
 
 #chooses a random message to send to the user
 def get_response(user_msg):
+    print("This is what I typed in: " + user_msg)
     resp = query_wit(user_msg)
     return str(resp)
 
