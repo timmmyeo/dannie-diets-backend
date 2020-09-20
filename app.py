@@ -8,7 +8,7 @@ import os
 # from dotenv import load_dotenv
 # load_dotenv()
 
-from main_functions import query_wit
+from main_functions import query_wit, update_firestore
 
 
 app = Flask(__name__)
@@ -71,6 +71,7 @@ def get_response(user_msg):
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
     elif resp['intents'][0]['name'] == 'food_ate':
         food_ate = resp["entities"]['food:food'][0]['value']
+        update_firestore("test", food_ate)
         return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
     elif resp['intents'][0]['name'] == 'nutrition_query':
         return "So you're interested in your health, great!"
