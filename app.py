@@ -4,7 +4,7 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import os
 
-from wit import Wit
+# from wit import Wit
 
 # from dotenv import load_dotenv
 # load_dotenv()
