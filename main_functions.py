@@ -71,7 +71,7 @@ def query_wit(msg):
   client = Wit(os.environ['WIT_KEY'])
   resp = client.message(msg)
   print('Yay, got Wit.ai response: ' + str(resp))
-  return str(resp)
+  return resp
 
 if __name__ == "__main__":
     # update_firestore("test", "banana", 100, 10, 10, 10)

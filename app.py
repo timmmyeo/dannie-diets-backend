@@ -67,7 +67,7 @@ def get_response(user_msg):
     client = Wit(os.environ['WIT_KEY'])
     resp = client.message(user_msg)
     print('Yay, got Wit.ai response: ' + str(resp))
-    return resp
+    return str(resp)
 
 
 
