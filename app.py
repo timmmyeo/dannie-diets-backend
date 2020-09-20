@@ -4,6 +4,9 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import os
 
+# from dotenv import load_dotenv
+# load_dotenv()
+
 from main_functions import get_nutrition, update_firestore, query_wit
 
 
@@ -36,11 +39,12 @@ def receive_message():
 
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
-                    send_message(recipient_id, str(message))
-                    send_message(recipient_id, message['message']["attachments"][0]["type"])
-                    send_message(recipient_id, message['message']["attachments"][0]["payload"]["url"])
-                    response_sent_nontext = get_message()
-                    send_message(recipient_id, response_sent_nontext)
+                    # send_message(recipient_id, str(message))
+                    # send_message(recipient_id, message['message']["attachments"][0]["type"])
+                    # send_message(recipient_id, message['message']["attachments"][0]["payload"]["url"])
+                    # response_sent_nontext = get_message()
+                    # send_message(recipient_id, response_sent_nontext)
+                    pass
     return "Message Processed"
 
 
@@ -51,17 +55,18 @@ def verify_fb_token(token_sent):
         return request.args.get("hub.challenge")
     return 'Invalid verification token'
 
+#uses PyMessenger to send response to user
+def process_response(recipient_id, user_msg):
+    #sends user the text message provided via input response parameter
+    bot.send_text_message(recipient_id, get_response(user_msg))
+    return "success"
 
 #chooses a random message to send to the user
 def get_response(user_msg):
     wit_resp = query_wit(user_msg)
     return wit_resp
 
-#uses PyMessenger to send response to user
-def process_response(recipient_id, user_msg):
-    #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, get_response(user_msg))
-    return "success"
+
 
 if __name__ == "__main__":
     app.run()

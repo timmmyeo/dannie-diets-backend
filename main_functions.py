@@ -76,3 +76,4 @@ if __name__ == "__main__":
     # update_firestore("test", "banana", 100, 10, 10, 10)
     # get_nutrition("bottle")
     # query_wit("I had a cake just now")
+    pass
