@@ -7,7 +7,7 @@ import os
 # from dotenv import load_dotenv
 # load_dotenv()
 
-# from main_functions import get_nutrition, query_wit
+from main_functions import get_nutrition, query_wit
 
 
 app = Flask(__name__)
@@ -63,7 +63,7 @@ def process_response(recipient_id, user_msg):
 
 #chooses a random message to send to the user
 def get_response(user_msg):
-    wit_resp = "test"
+    wit_resp = query_wit(user_msg)
     return wit_resp
 
 
