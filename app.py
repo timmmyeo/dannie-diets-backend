@@ -4,6 +4,9 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import os
 
+from main_functions import get_nutrition, update_firestore, query_wit
+
+
 app = Flask(__name__)
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
@@ -27,11 +30,10 @@ def receive_message():
             if message.get('message'):
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
-                send_message(recipient_id, message["timestamp"])
                 if message['message'].get('text'):
-                    send_message(recipient_id, str(message))
-                    response = message['message']['text']
-                    send_message(recipient_id, response)
+                    user_msg = message['message']['text']
+                    process_response(recipient_id, user_msg)
+
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     send_message(recipient_id, str(message))
@@ -51,15 +53,14 @@ def verify_fb_token(token_sent):
 
 
 #chooses a random message to send to the user
-def get_message():
-    sample_responses = ["You are stunning!", "We're proud of you.", "Keep on being you!", "We're greatful to know you :)"]
-    # return selected item to the user
-    return random.choice(sample_responses)
+def get_response(user_msg):
+    wit_resp = query_wit(user_msg)
+    return wit_resp
 
 #uses PyMessenger to send response to user
-def send_message(recipient_id, response):
+def process_response(recipient_id, user_msg):
     #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, response)
+    bot.send_text_message(recipient_id, get_response(user_msg))
     return "success"
 
 if __name__ == "__main__":

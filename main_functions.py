@@ -11,6 +11,8 @@ from firebase_admin import firestore
 
 from datetime import datetime
 
+from wit import Wit
+
 
 # Retrieves essential information from the nutrionix API given a query
 def get_nutrition(query):
@@ -62,7 +64,15 @@ def update_firestore(user_id, food, calories, fat_g, sodium_mg, protein_g):
       }
   })
 
+# Queries Wit.ai and returns useful information 
+# TODO: if confidence is below 50%, then maybe return None?
+def query_wit(msg):
+  client = Wit(os.environ['WIT_KEY'])
+  resp = client.message(msg)
+  print('Yay, got Wit.ai response: ' + str(resp))
+  return resp
 
 if __name__ == "__main__":
     # update_firestore("test", "banana", 100, 10, 10, 10)
     # get_nutrition("bottle")
+    # query_wit("I had a cake just now")
