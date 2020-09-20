@@ -1,7 +1,8 @@
 import requests
 import json
-# from dotenv import load_dotenv
-# load_dotenv()
+
+from dotenv import load_dotenv
+load_dotenv()
 
 import os
 
@@ -43,26 +44,26 @@ def get_nutrition(query):
     }
 
 # Updates the firestore given the user, food they ate, and nutritional information about that food
-def update_firestore(user_id, food, calories, fat_g, sodium_mg, protein_g):
-  cred = credentials.Certificate('./serviceAccountKey.json')
-  firebase_admin.initialize_app(cred)
+# def update_firestore(user_id, food, calories, fat_g, sodium_mg, protein_g):
+#   cred = credentials.Certificate('./serviceAccountKey.json')
+#   firebase_admin.initialize_app(cred)
 
-  db = firestore.client()
+#   db = firestore.client()
 
-  current_date = datetime.today().strftime('%d-%m-%Y') 
+#   current_date = datetime.today().strftime('%d-%m-%Y') 
 
-  user_doc= db.collection('users').document(user_id)
-  user_doc.update({
-      current_date: {
-        "food": firestore.ArrayUnion([food]),
-        "total_nutrition": {
-          "calories": firestore.Increment(calories),
-          "fat_g": firestore.Increment(fat_g),
-          "sodium_mg": firestore.Increment(sodium_mg),
-          "protein_g": firestore.Increment(protein_g)
-        }
-      }
-  })
+#   user_doc= db.collection('users').document(user_id)
+#   user_doc.update({
+#       current_date: {
+#         "food": firestore.ArrayUnion([food]),
+#         "total_nutrition": {
+#           "calories": firestore.Increment(calories),
+#           "fat_g": firestore.Increment(fat_g),
+#           "sodium_mg": firestore.Increment(sodium_mg),
+#           "protein_g": firestore.Increment(protein_g)
+#         }
+#       }
+#   })
 
 # Queries Wit.ai and returns useful information 
 # TODO: if confidence is below 50%, then maybe return None?
