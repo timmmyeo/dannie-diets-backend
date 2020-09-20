@@ -4,6 +4,10 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import os
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import json
 
 # from dotenv import load_dotenv
 # load_dotenv()
@@ -15,6 +19,12 @@ app = Flask(__name__)
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 bot = Bot(ACCESS_TOKEN)
+
+GOOGLE_FIREBASE_KEY = str.encode(os.environ['GOOGLE_FIREBASE_KEY'])
+cred = credentials.Certificate(json.loads(base64.decodebytes(GOOGLE_FIREBASE_KEY)))
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()
 
 #We will receive messages that Facebook sends our bot at this endpoint 
 @app.route("/", methods=['GET', 'POST'])
@@ -73,7 +83,7 @@ def get_response(user_msg):
         if 'food:food' not in resp['entities']:
             return "I'm not really sure what you ate... seems like I need to learn more about the world of humans!"
         food_ate = resp["entities"]['food:food'][0]['value']
-        update_firestore("test", food_ate)
+        update_firestore("test", food_ate, db)
         return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
     elif resp['intents'][0]['name'] == 'nutrition_query':
         return "So you're interested in your health, great!"

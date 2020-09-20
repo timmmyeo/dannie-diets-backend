@@ -14,7 +14,6 @@ from datetime import datetime
 
 from wit import Wit
 
-import base64
 
 
 # Retrieves essential information from the nutrionix API given a query
@@ -44,13 +43,9 @@ def get_nutrition(query):
     }
 
 # # Updates the firestore given the user, food they ate, and nutritional information about that food
-def update_firestore(user_id, food):
+def update_firestore(user_id, food, db):
 
-  GOOGLE_FIREBASE_KEY = str.encode(os.environ['GOOGLE_FIREBASE_KEY'])
-  cred = credentials.Certificate(json.loads(base64.decodebytes(GOOGLE_FIREBASE_KEY)))
-  firebase_admin.initialize_app(cred)
-
-  db = firestore.client()
+  
 
   food_nutrition = get_nutrition(food)
 
