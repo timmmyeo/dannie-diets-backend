@@ -4,10 +4,11 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import os
 
+from wit import Wit
+
 # from dotenv import load_dotenv
 # load_dotenv()
 
-from main_functions import get_nutrition, query_wit
 
 
 app = Flask(__name__)
@@ -63,8 +64,10 @@ def process_response(recipient_id, user_msg):
 
 #chooses a random message to send to the user
 def get_response(user_msg):
-    wit_resp = "test"
-    return wit_resp
+    client = Wit(os.environ['WIT_KEY'])
+    resp = client.message(msg)
+    print('Yay, got Wit.ai response: ' + str(resp))
+    return resp
 
 
 
