@@ -65,7 +65,7 @@ def process_response(recipient_id, user_msg):
 #chooses a random message to send to the user
 def get_response(user_msg):
     client = Wit(os.environ['WIT_KEY'])
-    resp = client.message(msg)
+    resp = client.message(user_msg)
     print('Yay, got Wit.ai response: ' + str(resp))
     return resp
 
