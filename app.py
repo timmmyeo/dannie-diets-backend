@@ -66,7 +66,15 @@ def process_response(recipient_id, user_msg):
 def get_response(user_msg):
     print("This is what I typed in: " + user_msg)
     resp = query_wit(user_msg)
-    return str(resp)
+    
+    if (len(resp['intents']) == 0):
+        return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
+    else if (resp['intents'][0]['name'] == 'food_ate'):
+        return "Ah, so you ate food. Nice!"
+    else if resp['intents'][0]['name'] == 'nutrition_query':
+        return "So you're interested in your health, great!"
+    else:
+        return "Bippity bop, looks like I'm borked!"
 
 
 
