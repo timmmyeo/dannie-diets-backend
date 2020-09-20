@@ -45,8 +45,6 @@ def get_nutrition(query):
 # # Updates the firestore given the user, food they ate, and nutritional information about that food
 def update_firestore(user_id, food, db):
 
-  
-
   food_nutrition = get_nutrition(food)
 
   current_date = datetime.today().strftime('%d-%m-%Y') 

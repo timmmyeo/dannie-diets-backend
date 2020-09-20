@@ -8,6 +8,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import json
+import base64
 
 # from dotenv import load_dotenv
 # load_dotenv()
