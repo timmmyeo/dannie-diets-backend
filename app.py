@@ -70,7 +70,8 @@ def get_response(user_msg):
     if len(resp['intents']) == 0:
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
     elif resp['intents'][0]['name'] == 'food_ate':
-        return "Ah, so you ate food. Nice!"
+        food_ate = resp["entities"]['food:food'][0]['value']
+        return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
     elif resp['intents'][0]['name'] == 'nutrition_query':
         return "So you're interested in your health, great!"
     else:
