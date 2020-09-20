@@ -5,6 +5,12 @@ load_dotenv()
 
 import os
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+from datetime import datetime
+
 
 # Retrieves essential information from the nutrionix API given a query
 def get_nutrition(query):
@@ -24,6 +30,8 @@ def get_nutrition(query):
 
   data = r.json() 
 
+  print(data)
+
   return {
     "food_name": data['foods'][0]["food_name"],
     "calories": data['foods'][0]["nf_calories"],
@@ -32,9 +40,29 @@ def get_nutrition(query):
     "protein_g": data['foods'][0]["nf_protein"]
     }
 
-  def update_firebase():
-    
+# Updates the firestore given the user, food they ate, and nutritional information about that food
+def update_firestore(user_id, food, calories, fat_g, sodium_mg, protein_g):
+  cred = credentials.Certificate('./serviceAccountKey.json')
+  firebase_admin.initialize_app(cred)
+
+  db = firestore.client()
+
+  current_date = datetime.today().strftime('%d-%m-%Y') 
+
+  user_doc= db.collection('users').document(user_id)
+  user_doc.update({
+      current_date: {
+        "food": firestore.ArrayUnion([food]),
+        "total_nutrition": {
+          "calories": firestore.Increment(calories),
+          "fat_g": firestore.Increment(fat_g),
+          "sodium_mg": firestore.Increment(sodium_mg),
+          "protein_g": firestore.Increment(protein_g)
+        }
+      }
+  })
 
 
 if __name__ == "__main__":
-    print(get_nutrition("hamburger"))
+    # update_firestore("test", "banana", 100, 10, 10, 10)
+    # get_nutrition("bottle")
