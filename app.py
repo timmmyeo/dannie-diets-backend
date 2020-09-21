@@ -39,12 +39,12 @@ def receive_message():
     else:
         # get whatever message a user sent the bot
        output = request.get_json()
-       print()
-       print("*********")
-       print("json of request:")
-       print(str(output))
-       print("**********")
-       print()
+    #    print()
+    #    print("*********")
+    #    print("json of request:")
+    #    print(str(output))
+    #    print("**********")
+    #    print()
        for event in output['entry']:
           messaging = event['messaging']
           for message in messaging:
@@ -86,9 +86,11 @@ def process_response(recipient_id, user_msg):
 
 #chooses a random message to send to the user
 def get_response(user_msg: str) -> str:
+    print()
     print("====")
     print("This is what I typed in: " + user_msg)
     print("====")
+    print()
     resp = query_wit(user_msg)
     
     # Doesn't match any intents
@@ -100,12 +102,20 @@ def get_response(user_msg: str) -> str:
         if 'food:food' not in resp['entities']:
             return "I'm not really sure what you ate... seems like I need to learn more about the world of humans!"
         food_ate = resp["entities"]['food:food'][0]['value']
+
+        # Try to query Nutrionix
         try:
             food_nutrition = get_nutrition(food_ate)
-            update_firestore(user_id="test", db=db, food_nutrition=food_nutrition)
-            return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
         except:
-            print("Error occured somewhere!")
+            print("Error querying nutrionix! with parameter", food_ate)
+            return "That food doesn't exist... does it?"
+    
+        # Try to update firestore
+        try:
+            update_firestore(user_id="test", db=db, food_nutrition=food_nutrition)
+            return "Seems like you ate: " + str(food_ate) + ". Noted!"
+        except:
+            print("Error occured when updating firestore!")
             return "That food doesn't exist... does it?"
         
     elif resp['intents'][0]['name'] == 'nutrition_query':
