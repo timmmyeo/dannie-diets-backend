@@ -113,6 +113,22 @@ def get_response(user_msg: str, is_audio) -> str:
     # Doesn't match any intents
     if len(resp['intents']) == 0:
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
+    
+    #TODO: process datetime entity
+    elif resp['intents'][0]['name'] == 'foods_eaten_get':
+        try:
+            firestore_data = query_firestore(user_id="test", db=db, nutrition_type="foods_eaten")
+            if firestore_data == -1:
+                return "Looks like you don't exist yet in our systems!"
+            elif firestore_data == -2:
+                return "I don't think you've eaten anything today... Don't starve to death!"
+            elif firestore_data == -3:
+                return "I'm not really sure what information you're asking for. Are you sure that question is for me?"
+            else:
+                return "Here is what you've eaten today" + str(firestore_data)
+        except:
+            print("Error querying firestore")
+            return "Beep boop, something went wrong. Looks like my internals are borked!"
 
     elif resp['intents'][0]['name'] == 'food_ate':
         # No food entity

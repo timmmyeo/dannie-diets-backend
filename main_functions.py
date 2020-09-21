@@ -75,7 +75,9 @@ def query_firestore(user_id, db, nutrition_type):
   if current_date not in user_dict:
     return -2
   
-  if nutrition_type == "protein":
+  if nutrition_type == "foods_eaten":
+    return user_dict[current_date]["foods"]
+  elif nutrition_type == "protein":
     return user_dict[current_date]["total_nutrition"]["protein_g"]
   elif nutrition_type == "sodium":
     return user_dict[current_date]["total_nutrition"]["sodium_mg"]
@@ -104,10 +106,4 @@ def query_wit(msg, is_audio):
   print('Yay, got Wit.ai response: ' + str(resp))
   return resp
 
-
-if __name__ == "__main__":
-    # update_firestore("test", "banana")
-    # get_nutrition("bottle")
-    # query_wit("I had a cake just now")
-    pass
 
