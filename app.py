@@ -11,7 +11,7 @@ import json
 import base64
 
 import subprocess
-import urllib
+import urllib.request
 
 # from dotenv import load_dotenv
 # load_dotenv()
@@ -72,12 +72,15 @@ def receive_message():
                         bot.send_text_message(recipient_id, "I don't know how to understand that type of message, really sorry about that!")
                         return "Message Processed"
                     
-                    audio_url = message['message']['attachments'][0]['payload']['url']
-                    audio_file = urllib.URLopener()
-                    audio_file.retrieve(audio_url, "in.mp4")
-                    command = "ffmpeg -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
-                    print("success I think?")
-                    bot.send_text_message(recipient_id, str(audio_url))
+                    try:
+                        audio_url = message['message']['attachments'][0]['payload']['url']
+                        urllib.request.urlretrieve(audio_url, "in.mp4")
+                        command = "ffmpeg -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
+                        subprocess.call(command, shell=True)
+                        print("success I think?")
+                        bot.send_text_message(recipient_id, str(audio_url))
+                    except:
+                        bot.send_text_message(recipient_id, "Looks like my ears are broken, oops!")
 
     return "Message Processed"
 
