@@ -61,6 +61,7 @@ def receive_message():
 
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
+                    print(str(message))
                     # send_message(recipient_id, str(message))
                     # send_message(recipient_id, message['message']["attachments"][0]["type"])
                     # send_message(recipient_id, message['message']["attachments"][0]["payload"]["url"])
