@@ -13,7 +13,7 @@ import base64
 # from dotenv import load_dotenv
 # load_dotenv()
 
-from main_functions import query_wit, update_firestore
+from main_functions import query_wit, update_firestore, get_nutrition
 
 
 app = Flask(__name__)
@@ -74,23 +74,28 @@ def process_response(recipient_id, user_msg):
     return "success"
 
 #chooses a random message to send to the user
-def get_response(user_msg):
+def get_response(user_msg: str) -> str:
+    print("====")
     print("This is what I typed in: " + user_msg)
+    print("====")
     resp = query_wit(user_msg)
-
+    
+    # Doesn't match any intents
     if len(resp['intents']) == 0:
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
 
     elif resp['intents'][0]['name'] == 'food_ate':
+        # No food entity
         if 'food:food' not in resp['entities']:
             return "I'm not really sure what you ate... seems like I need to learn more about the world of humans!"
         food_ate = resp["entities"]['food:food'][0]['value']
         try:
-            update_firestore("test", food_ate, db)
+            food_nutrition = get_nutrition(food_ate)
+            update_firestore(user_id="test", db=db, food_nutrition=food_nutrition)
             return "Seems like you ate: " + str(food_ate) + ". Ah, so you ate food. Nice!"
         except:
             print("Error occured somewhere!")
-            return "Boo! Your statement didn't make sense! (Could be me too, hah!)"
+            return "That food doesn't exist... does it?"
         
     elif resp['intents'][0]['name'] == 'nutrition_query':
         return "So you're interested in your health, great!"

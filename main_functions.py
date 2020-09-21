@@ -43,16 +43,14 @@ def get_nutrition(query):
     }
 
 # # Updates the firestore given the user, food they ate, and nutritional information about that food
-def update_firestore(user_id, food, db):
-
-  food_nutrition = get_nutrition(food)
+def update_firestore(user_id, db, food_nutrition):
 
   current_date = datetime.today().strftime('%d-%m-%Y') 
 
   user_doc= db.collection('users').document(user_id)
   user_doc.update({
       current_date: {
-        "food": firestore.ArrayUnion([food]),
+        "food": firestore.ArrayUnion([food_nutrition['food_name']]),
         "total_nutrition": {
           "calories": firestore.Increment(food_nutrition['calories']),
           "fat_g": firestore.Increment(food_nutrition['fat_g']),
