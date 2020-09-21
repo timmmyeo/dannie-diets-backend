@@ -70,6 +70,23 @@ def query_firestore(user_id, db, nutrition_type):
     print("User doesn't exist in firestore")
     return -1
 
+  user_dict = user_doc.to_dict()
+
+  if current_date not in user_dict:
+    return -2
+  
+  if nutrition_type == "protein":
+    return user_dict[current_date]["total_nutrition"]["protein_g"]
+  elif nutrition_type == "sodium":
+    return user_dict[current_date]["total_nutrition"]["sodium_mg"]
+  elif nutrition_type == "fat":
+    return user_dict[current_date]["total_nutrition"]["fat_g"]
+  elif nutrition_type == "calories":
+    return user_dict[current_date]["total_nutrition"]["calories"]
+  else:
+    return -3
+  
+
   return str(user_doc.to_dict())
 
 # Queries Wit.ai and returns useful information 

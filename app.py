@@ -116,7 +116,7 @@ def get_response(user_msg: str) -> str:
             return "Seems like you ate: " + str(food_ate) + ". Noted!"
         except:
             print("Error occured when updating firestore!")
-            return "That food doesn't exist... does it?"
+            return "Beep boop, something went wrong. Looks like my internals are borked!"
         
     elif resp['intents'][0]['name'] == 'nutrition_query':
         # No nutrition_type entity
@@ -125,7 +125,19 @@ def get_response(user_msg: str) -> str:
         
         nutrition_type = resp["entities"]['nutrition_type:nutrition_type'][0]['value']
         
-        return query_firestore(user_id="test", db=db, nutrition_type=nutrition_type)
+        try:
+            firestore_data = query_firestore(user_id="test", db=db, nutrition_type=nutrition_type)
+            if firestore_data == -1:
+                return "Looks like you don't exist yet in our systems!"
+            elif firestore_data == -2:
+                return "I don't think you've eaten anything today... Don't starve to death!"
+            elif firestore_data == -3:
+                return "I'm not really sure what information you're asking for. Are you sure that question is for me?"
+            else:
+                return "Here is your " + str(nutrition_type) + " for today: " + str(firestore_data) + "."
+        except:
+            print("Error querying firestore")
+            return "Beep boop, something went wrong. Looks like my internals are borked!"
 
     else:
         return "Bippity bop, looks like I'm borked!"
