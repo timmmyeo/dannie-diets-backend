@@ -13,7 +13,7 @@ import base64
 # from dotenv import load_dotenv
 # load_dotenv()
 
-from main_functions import query_wit, update_firestore, get_nutrition
+from main_functions import query_wit, update_firestore, get_nutrition, query_firestore
 
 
 app = Flask(__name__)
@@ -125,7 +125,7 @@ def get_response(user_msg: str) -> str:
         
         nutrition_type = resp["entities"]['nutrition_type:nutrition_type'][0]['value']
         
-        return "Looks like you want to know about your " + str(nutrition_type) + " for today."
+        return query_firestore(user_id="test", db=db, nutrition_type=nutrition_type)
 
     else:
         return "Bippity bop, looks like I'm borked!"

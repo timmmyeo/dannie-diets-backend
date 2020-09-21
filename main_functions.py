@@ -47,7 +47,7 @@ def update_firestore(user_id, db, food_nutrition):
 
   current_date = datetime.today().strftime('%d-%m-%Y') 
 
-  user_doc= db.collection('users').document(user_id)
+  user_doc = db.collection('users').document(user_id)
   user_doc.update({
       current_date: {
         "food": firestore.ArrayUnion([food_nutrition['food_name']]),
@@ -59,6 +59,18 @@ def update_firestore(user_id, db, food_nutrition):
         }
       }
   })
+
+def query_firestore(user_id, db, nutrition_type):
+
+  current_date = datetime.today().strftime('%d-%m-%Y') 
+
+  user_doc = db.collection('users').document(user_id).get()
+
+  if not user_doc.exists:
+    print("User doesn't exist in firestore")
+    return -1
+
+  return str(user_doc.to_dict())
 
 # Queries Wit.ai and returns useful information 
 # TODO: if confidence is below 50%, then maybe return None?
