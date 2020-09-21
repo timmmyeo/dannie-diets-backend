@@ -103,11 +103,11 @@ def get_response(user_msg: str) -> str:
             return "I'm not really sure what you ate... seems like I need to learn more about the world of humans!"
         food_ate = resp["entities"]['food:food'][0]['value']
 
-        # Try to query Nutrionix
+        # Try to query Nutritionix
         try:
             food_nutrition = get_nutrition(food_ate)
         except:
-            print("Error querying nutrionix! with parameter", food_ate)
+            print("Error querying nutritionix! with parameter", food_ate)
             return "That food doesn't exist... does it?"
     
         # Try to update firestore
@@ -119,7 +119,14 @@ def get_response(user_msg: str) -> str:
             return "That food doesn't exist... does it?"
         
     elif resp['intents'][0]['name'] == 'nutrition_query':
-        return "So you're interested in your health, great!"
+        # No nutrition_type entity
+        if 'nutrition_type:nutrition_type' not in resp['entities']:
+            return "I'm not really sure what information you're asking for. Are you sure that question is for me?"
+        
+        nutrition_type = resp["entities"]['nutrition_type:nutrition_type'][0]['value']
+        
+        return "Looks like you want to know about your " + str(nutrition_type) + " for today."
+
     else:
         return "Bippity bop, looks like I'm borked!"
 
