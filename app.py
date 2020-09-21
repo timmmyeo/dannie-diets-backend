@@ -21,6 +21,8 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 bot = Bot(ACCESS_TOKEN)
 
+BOT_ID = '100302671815444'
+
 GOOGLE_FIREBASE_KEY = str.encode(os.environ['GOOGLE_FIREBASE_KEY'])
 cred = credentials.Certificate(json.loads(base64.decodebytes(GOOGLE_FIREBASE_KEY)))
 firebase_admin.initialize_app(cred)
@@ -52,7 +54,7 @@ def receive_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
                 # We don't want to process the bot response!
-                if recipient_id == '100302671815444':
+                if recipient_id == BOT_ID:
                     return "Message Processed"
                 if message['message'].get('text'):
                     user_msg = message['message']['text']
@@ -62,12 +64,14 @@ def receive_message():
                 #if user sends us a GIF, photo,video, or any other non-text item
                 if message['message'].get('attachments'):
                     print(str(message))
-                    # send_message(recipient_id, str(message))
-                    # send_message(recipient_id, message['message']["attachments"][0]["type"])
-                    # send_message(recipient_id, message['message']["attachments"][0]["payload"]["url"])
-                    # response_sent_nontext = get_message()
-                    # send_message(recipient_id, response_sent_nontext)
-                    pass
+
+                    if message['message']['attachments'][0]['type'] != 'audio':
+                        bot.send_text_message(recipient_id, "I don't know how to understand that type of message, really sorry about that!")
+                        return "Message Processed"
+                    
+                    audio_url = message['message']['attachments'][0]['payload']['url']
+                    bot.send_text_message(recipient_id, str(audio_url))
+
     return "Message Processed"
 
 
