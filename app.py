@@ -70,7 +70,8 @@ def verify_fb_token(token_sent):
 #uses PyMessenger to send response to user
 def process_response(recipient_id, user_msg):
     #sends user the text message provided via input response parameter
-    bot.send_text_message(recipient_id, get_response(user_msg))
+    bot_response = get_response(user_msg)
+    bot.send_text_message(recipient_id, bot_response)
     return "success"
 
 #chooses a random message to send to the user
