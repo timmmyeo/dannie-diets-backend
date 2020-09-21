@@ -77,7 +77,8 @@ def receive_message():
                         urllib.request.urlretrieve(audio_url, "in.mp4")
                         command = "ffmpeg -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
                         subprocess.call(command, shell=True)
-                        print("success I think?")
+                        print("success downloading file I think?")
+                        process_response(recipient_id, 'out.wav', is_audio=True)
                         bot.send_text_message(recipient_id, str(audio_url))
                     except:
                         bot.send_text_message(recipient_id, "Looks like my ears are broken, oops!")
@@ -93,20 +94,22 @@ def verify_fb_token(token_sent):
     return 'Invalid verification token'
 
 #uses PyMessenger to send response to user
-def process_response(recipient_id, user_msg):
+def process_response(recipient_id, user_msg, is_audio=False):
     #sends user the text message provided via input response parameter
-    bot_response = get_response(user_msg)
+    bot_response = get_response(user_msg, is_audio)
     bot.send_text_message(recipient_id, bot_response)
     return "success"
 
 #chooses a random message to send to the user
-def get_response(user_msg: str) -> str:
+def get_response(user_msg: str, is_audio) -> str:
     print()
     print("====")
     print("This is what I typed in: " + user_msg)
     print("====")
     print()
-    resp = query_wit(user_msg)
+
+
+    resp = query_wit(msg=user_msg, is_audio=is_audio)
     
     # Doesn't match any intents
     if len(resp['intents']) == 0:

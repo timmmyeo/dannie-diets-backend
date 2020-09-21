@@ -91,12 +91,19 @@ def query_firestore(user_id, db, nutrition_type):
 
 # Queries Wit.ai and returns useful information 
 # TODO: if confidence is below 50%, then maybe return None?
-def query_wit(msg):
+def query_wit(msg, is_audio):
   print("Querying wit with " + msg)
   client = Wit(os.environ['WIT_KEY'])
-  resp = client.message(msg)
+
+  if is_audio:
+    with open(msg, 'rb') as f:
+      resp = client.speech(f, {'Content-Type': 'audio/wav'})
+  else:
+    resp = client.message(msg)
+
   print('Yay, got Wit.ai response: ' + str(resp))
   return resp
+
 
 if __name__ == "__main__":
     # update_firestore("test", "banana")
