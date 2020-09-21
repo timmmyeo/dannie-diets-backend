@@ -52,7 +52,7 @@ def receive_message():
                 #Facebook Messenger ID for user so we know where to send response back to
                 recipient_id = message['sender']['id']
                 # We don't want to process the bot response!
-                if recipient_id == 100302671815444:
+                if recipient_id == '100302671815444':
                     return "Message Processed"
                 if message['message'].get('text'):
                     user_msg = message['message']['text']
