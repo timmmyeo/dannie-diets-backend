@@ -50,7 +50,7 @@ def update_firestore(user_id, db, food_nutrition):
   user_doc = db.collection('users').document(user_id)
   user_doc.update({
       current_date: {
-        "food": firestore.ArrayUnion([food_nutrition['food_name']]),
+        "foods": firestore.ArrayUnion([food_nutrition['food_name']]),
         "total_nutrition": {
           "calories": firestore.Increment(food_nutrition['calories']),
           "fat_g": firestore.Increment(food_nutrition['fat_g']),

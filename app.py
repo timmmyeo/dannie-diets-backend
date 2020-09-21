@@ -79,8 +79,9 @@ def receive_message():
                         subprocess.call(command, shell=True)
                         print("success downloading file I think?")
                         process_response(recipient_id, 'out.wav', is_audio=True)
+                        os.remove('out.wav')
                     except:
-                        bot.send_text_message(recipient_id, "Looks like my ears are broken, oops!")
+                        bot.send_text_message(recipient_id, "Looks like my ears are broken, oops! Try typing something instead.")
 
     return "Message Processed"
 
@@ -119,7 +120,7 @@ def get_response(user_msg: str, is_audio) -> str:
         try:
             firestore_data = query_firestore(user_id="test", db=db, nutrition_type="foods_eaten")
             if firestore_data == -1:
-                return "Looks like you don't exist yet in our systems!"
+                return "Looks like you don't exist yet in our systems! Try saying what you ate today and we'll get you registered up."
             elif firestore_data == -2:
                 return "I don't think you've eaten anything today... Don't starve to death!"
             elif firestore_data == -3:
@@ -161,7 +162,7 @@ def get_response(user_msg: str, is_audio) -> str:
         try:
             firestore_data = query_firestore(user_id="test", db=db, nutrition_type=nutrition_type)
             if firestore_data == -1:
-                return "Looks like you don't exist yet in our systems!"
+                return "Looks like you don't exist yet in our systems! Try saying what you ate today and we'll get you registered up."
             elif firestore_data == -2:
                 return "I don't think you've eaten anything today... Don't starve to death!"
             elif firestore_data == -3:
