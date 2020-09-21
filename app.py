@@ -43,7 +43,7 @@ def receive_message():
        print("*********")
        print("json of request:")
        print(str(output))
-       print"**********"
+       print("**********")
        print()
        for event in output['entry']:
           messaging = event['messaging']
