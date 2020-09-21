@@ -75,11 +75,10 @@ def receive_message():
                     try:
                         audio_url = message['message']['attachments'][0]['payload']['url']
                         urllib.request.urlretrieve(audio_url, "in.mp4")
-                        command = "ffmpeg -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
+                        command = "ffmpeg -y -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
                         subprocess.call(command, shell=True)
                         print("success downloading file I think?")
                         process_response(recipient_id, 'out.wav', is_audio=True)
-                        bot.send_text_message(recipient_id, str(audio_url))
                     except:
                         bot.send_text_message(recipient_id, "Looks like my ears are broken, oops!")
 
