@@ -47,6 +47,7 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 if message['message'].get('text'):
                     user_msg = message['message']['text']
+                    print("The user message that I'm passing in is this: " + user_msg)
                     process_response(recipient_id, user_msg)
 
                 #if user sends us a GIF, photo,video, or any other non-text item
