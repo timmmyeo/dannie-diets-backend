@@ -10,6 +10,9 @@ from firebase_admin import firestore
 import json
 import base64
 
+import subprocess
+import urllib
+
 # from dotenv import load_dotenv
 # load_dotenv()
 
@@ -70,6 +73,10 @@ def receive_message():
                         return "Message Processed"
                     
                     audio_url = message['message']['attachments'][0]['payload']['url']
+                    audio_file = urllib.URLopener()
+                    audio_file.retrieve(audio_url, "in.mp4")
+                    command = "ffmpeg -i in.mp4 -ab 160k -ac 2 -ar 44100 -vn out.wav"
+                    print("success I think?")
                     bot.send_text_message(recipient_id, str(audio_url))
 
     return "Message Processed"
