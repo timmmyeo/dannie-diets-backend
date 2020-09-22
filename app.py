@@ -115,6 +115,9 @@ def get_response(recipient_id, user_msg: str, is_audio) -> str:
     if len(resp['intents']) == 0:
         return "That's not something I understand, sorry about that! :( (I'm trying to get smarter every day ;)"
     
+    elif resp['intents'][0]['name'] == 'get_id':
+        return "Here's your ID: " + str(recipient_id) + ". Keep it safe!"
+    
     #TODO: process datetime entity
     elif resp['intents'][0]['name'] == 'foods_eaten_get':
         try:
