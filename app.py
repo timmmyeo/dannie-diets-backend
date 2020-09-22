@@ -146,7 +146,7 @@ def get_response(recipient_id, user_msg: str, is_audio) -> str:
     
         # Try to update firestore
         try:
-            update_firestore(user_id="test", db=db, food_nutrition=food_nutrition)
+            update_firestore(user_id=recipient_id, db=db, food_nutrition=food_nutrition)
             return "Seems like you ate: " + str(food_ate) + ". Noted!"
         except:
             print("Error occured when updating firestore!")
