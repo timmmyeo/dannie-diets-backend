@@ -96,12 +96,12 @@ def verify_fb_token(token_sent):
 #uses PyMessenger to send response to user
 def process_response(recipient_id, user_msg, is_audio=False):
     #sends user the text message provided via input response parameter
-    bot_response = get_response(user_msg, is_audio)
+    bot_response = get_response(recipient_id, user_msg, is_audio)
     bot.send_text_message(recipient_id, bot_response)
     return "success"
 
 #chooses a random message to send to the user
-def get_response(user_msg: str, is_audio) -> str:
+def get_response(recipient_id, user_msg: str, is_audio) -> str:
     print()
     print("====")
     print("This is what I typed in: " + user_msg)
@@ -118,7 +118,7 @@ def get_response(user_msg: str, is_audio) -> str:
     #TODO: process datetime entity
     elif resp['intents'][0]['name'] == 'foods_eaten_get':
         try:
-            firestore_data = query_firestore(user_id="test", db=db, nutrition_type="foods_eaten")
+            firestore_data = query_firestore(user_id=recipient_id, db=db, nutrition_type="foods_eaten")
             if firestore_data == -1:
                 return "Looks like you don't exist yet in our systems! Try saying what you ate today and we'll get you registered up."
             elif firestore_data == -2:
@@ -160,7 +160,7 @@ def get_response(user_msg: str, is_audio) -> str:
         nutrition_type = resp["entities"]['nutrition_type:nutrition_type'][0]['value']
         
         try:
-            firestore_data = query_firestore(user_id="test", db=db, nutrition_type=nutrition_type)
+            firestore_data = query_firestore(user_id=recipient_id, db=db, nutrition_type=nutrition_type)
             if firestore_data == -1:
                 return "Looks like you don't exist yet in our systems! Try saying what you ate today and we'll get you registered up."
             elif firestore_data == -2:
