@@ -58,7 +58,7 @@ def update_firestore(user_id, db, food_nutrition):
           "protein_g": firestore.Increment(food_nutrition['protein_g'])
         }
       }
-  }, merge=True)
+  }, {merge: True})
 
 def query_firestore(user_id, db, nutrition_type):
 
