@@ -47,19 +47,33 @@ def update_firestore(user_id, db, food_nutrition):
 
   current_date = datetime.today().strftime('%d-%m-%Y') 
 
-  user_doc = db.collection('users').document(user_id)
-  user_doc.update({
-      current_date: {
-        "foods": firestore.ArrayUnion([food_nutrition['food_name']]),
-        "total_nutrition": {
-          "calories": firestore.Increment(food_nutrition['calories']),
-          "fat_g": firestore.Increment(food_nutrition['fat_g']),
-          "sodium_mg": firestore.Increment(food_nutrition['sodium_mg']),
-          "protein_g": firestore.Increment(food_nutrition['protein_g'])
+  user_doc_ref = db.collection('users').document(user_id)
+  doc = user_doc_ref.get()
+  if doc.exists:
+    user_doc_ref.update({
+        current_date: {
+          "foods": firestore.ArrayUnion([food_nutrition['food_name']]),
+          "total_nutrition": {
+            "calories": firestore.Increment(food_nutrition['calories']),
+            "fat_g": firestore.Increment(food_nutrition['fat_g']),
+            "sodium_mg": firestore.Increment(food_nutrition['sodium_mg']),
+            "protein_g": firestore.Increment(food_nutrition['protein_g'])
+          }
         }
-      }
-  })
-  
+    })
+  else:
+    user_doc_ref.set({
+        current_date: {
+          "foods": [food_nutrition['food_name']],
+          "total_nutrition": {
+            "calories": food_nutrition['calories'],
+            "fat_g": food_nutrition['fat_g'],
+            "sodium_mg": food_nutrition['sodium_mg'],
+            "protein_g": food_nutrition['protein_g']
+          }
+        }
+    })
+
 def query_firestore(user_id, db, nutrition_type):
 
   current_date = datetime.today().strftime('%d-%m-%Y') 
