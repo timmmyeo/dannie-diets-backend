@@ -48,7 +48,7 @@ def update_firestore(user_id, db, food_nutrition):
   current_date = datetime.today().strftime('%d-%m-%Y') 
 
   user_doc = db.collection('users').document(user_id)
-  user_doc.set({
+  user_doc.update({
       current_date: {
         "foods": firestore.ArrayUnion([food_nutrition['food_name']]),
         "total_nutrition": {
@@ -58,8 +58,8 @@ def update_firestore(user_id, db, food_nutrition):
           "protein_g": firestore.Increment(food_nutrition['protein_g'])
         }
       }
-  }, merge=True)
-
+  })
+  
 def query_firestore(user_id, db, nutrition_type):
 
   current_date = datetime.today().strftime('%d-%m-%Y') 
@@ -105,5 +105,3 @@ def query_wit(msg, is_audio):
 
   print('Yay, got Wit.ai response: ' + str(resp))
   return resp
-
-
